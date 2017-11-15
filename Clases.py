@@ -73,6 +73,9 @@ class Texto:
     def imprimirError2(self):
         print "¡Te sobran puntos! Dadas tus malas matemáticas, te las asignaremos a Suerte (puede que la necesites)."
 
+    def imprimirError3(self):
+        print "¡No tienes tiempo suficiente para usar este consumible! Intenta con otro"
+
     # Esta funcion imprime la lista de consumibles que posee el personaje
     def imprimirConsumibles(self, lista):
         f = "{0}.- ({1}) {2}: {3} de tiempo, {4} de {5}"
@@ -113,17 +116,41 @@ class Simulacion:
         self.personaje = personaje
         self.copyPersonaje = copy.deepcopy(personaje)
 
+    def restarStockConsumible(self, indice):
+        objeto = self.consumibles[indice]
+        objeto.restarStock()
+
+    def stockCero(self, indice):
+        objeto = self.consumibles[indice]
+        return objeto.stockCero()
+
+    def removerConsumible(self, indice):
+        objeto = self.consumibles[indice]
+        self.consumibles.remove(objeto)
+
     def removerEquipo(self, indice):
         objeto = self.equipo[indice]
         self.equipo.remove(objeto)
 
-    def getAtributo(self, indice):
+    def getEAtributo(self, indice):
         objeto = self.equipo[indice]
         return objeto.getAtributo()
+
+    def getCAtributo(self, indice):
+        objeto = self.consumibles[indice]
+        return objeto.getAtributo()
+
+    def getCosto(self, indice):
+        objeto = self.consumibles[indice]
+        return objeto.getCosto()
 
     def getMultiplicador(self, indice):
         objeto = self.equipo[indice]
         return objeto.getMultiplicador()
+
+    def getBuff(self, indice):
+        objeto = self.consumibles[indice]
+        return objeto.getBuff()
 
     def getConsumibles(self):
         return self.consumibles
@@ -140,6 +167,14 @@ class Simulacion:
     def getcopyPersonaje(self):
         return self.copyPersonaje
 
+    def buffearAtributo(self, multiplicador, atributo):
+        self.personaje.buffearAtributo(multiplicador, atributo)
+
+    def imprimirStatsIniciales(self):
+        self.personaje.imprimirStatsIniciales()
+
+    def sumarStats(self, vida, destreza, resistencia, inteligencia, suerte):
+        self.personaje.sumarStats()
 
 class Prueba:
     def __init__(self, nombre, vida, destreza, resistencia, inteligencia,
@@ -220,6 +255,25 @@ class Personaje:
         else:
             self.suerte = int(math.floor(self.suerte * multiplicador))
 
+    # Esta funcion retorna un booleano si es que se pudo utilizar el consumible
+    # respecto al tiempo que posee el personaje.
+    def usarConsumible(self, atributo, buff, costo):
+        print self.tiempo
+        print costo
+        if (self.tiempo - costo) >= 0:
+            self.tiempo -= costo
+            if atributo == "destreza":
+                self.destreza += buff
+            elif atributo == "inteligencia":
+                self.inteligencia += buff
+            elif atributo == "suerte":
+                self.suerte += buff
+            else:
+                self.resistencia += buff
+            return True
+        else:
+            return False
+
 
 class Equipamiento:
     def __init__(self, nombre, atributo, multiplicador):
@@ -239,11 +293,22 @@ class Equipamiento:
 
 class Consumible:
     def __init__(self, nombre, stock, atributo, buff, costo):
+        print costo
         self.nombre = nombre
         self.stock = stock
         self.atributo = atributo
         self.buff = buff
         self.costo = costo
+
+    # Esta funcion verifica si el stock del consumible es 0
+    def stockCero(self):
+        if self.stock == 0:
+            return True
+        return False
+
+    # Esta funcion resta 1 en el stock del consumible
+    def restarStock(self):
+        self.stock -= 1
 
     def getNombre(self):
         return self.nombre
