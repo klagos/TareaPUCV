@@ -1,5 +1,4 @@
 from Clases import *
-from Funciones import *
 
 if __name__ == '__main__':
     # Crear Partida
@@ -25,6 +24,7 @@ if __name__ == '__main__':
         vida = int(raw_input(">"))
         total += vida
         if total > maxStats:
+            Dialogo.imprimirError1()
             continue
         elif total == maxStats:
             break
@@ -76,7 +76,9 @@ if __name__ == '__main__':
     ingreso = ""
     cantEquipados = 0
     while cantEquipados != 3:
+        print ""
         ingreso = int(raw_input("> "))
+        print ""
         if ingreso == -1:
             break
         multiplicador = Partida.getMultiplicador(ingreso - 1)

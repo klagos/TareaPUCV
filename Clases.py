@@ -43,17 +43,13 @@ class main:
 class Texto:
     def __init__(self, arch):
         lista = arch.readlines()
-        self.saludo = lista[:2]
-        self.cantidadExcedida = lista[2:4]
-        self.sobranPuntos = lista[4:6]
-        self.equipamiento = lista[6:8]
-        self.consumibles = lista[8:10]
         self.empezarEvaluacion = lista[10:13]
         self.Logrado = lista[13:15]
 
     # Esta funcion imprime el saludo del inicio del programa
     def imprimirSaludo(self):
-        print self.saludo[0] + self.saludo[1].strip()
+        print "¡Bienvenido a la simulación de pruebas!"
+        print "Por favor escribe el nombre de tu personaje:"
 
     # Imprime la vida, tiempo y stats iniciales a repartir del personaje
     def informarInicio(self, personaje):
@@ -70,11 +66,12 @@ class Texto:
 
     # Esta funcion imprimira el error al intentar agregar stats que exceden de los que posee el personaje
     def imprimirError1(self):
-        print self.cantidadExcedida[0] + self.cantidadExcedida[1].strip()
+        print "Lo siento, esa cantidad excede lo que tienes disponible."
+        print "Empezaremos de nuevo por si te equivocaste al repartir."
 
     # Esta funcion imprimira que sobraron stats al agregarselos al personaje.
     def imprimirError2(self):
-        print self.sobranPuntos[0] + self.sobranPuntos[1].strip()
+        print "¡Te sobran puntos! Dadas tus malas matemáticas, te las asignaremos a Suerte (puede que la necesites)."
 
     # Esta funcion imprime la lista de consumibles que posee el personaje
     def imprimirConsumibles(self, lista):
@@ -88,7 +85,8 @@ class Texto:
 
     # Imprime el texto relacionado con los consumibles y luego se imprime el listado de consumibles
     def imprimirListadoCon(self, lista):
-        print self.consumibles[0] + self.consumibles[1]
+        print "Aquí están los consumibles, selecciona el número del objeto que deseas."
+        print "Para comenzar la evaluación ingresa -1."
         self.imprimirConsumibles(lista)
 
     # Esta funcion imprime la lista de equipamiento que posee el personaje
@@ -102,7 +100,8 @@ class Texto:
 
     # Esta funcion imprime el texto relacionado con los equipos y luego se imprime el listado de equipamiento
     def imprimirListadoEq(self, lista):
-        print self.equipamiento[0] + self.equipamiento[1]
+        print "Aquí está el listado de todos los equipamientos que hay, elige un número para equiparlo."
+        print "En caso de que ya no quieras equiparte más ingresa -1."
         self.imprimirEquipamiento(lista)
 
 
