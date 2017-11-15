@@ -40,19 +40,38 @@ class main:
         Partida = Simulacion(listaConsumibles, listaEquipamiento, listaPruebas, Estudiante)
         return Partida
 
-class Texto:
-    def __init__(self, arch):
-        lista = arch.readlines()
-        self.empezarEvaluacion = lista[10:13]
-        self.Logrado = lista[13:15]
 
+    @staticmethod
+    def CalculoEvaluacion(Personaje, Prueba):
+        listaStatsPer = Personaje.getListaStats()
+        listaStatsPrueba = Prueba.getListaStats()
+        debilidad = Prueba.getDebilidad()
+        if debilidad == "destreza":
+            debilidad = Personaje.getDestreza()
+        elif debilidad == "resistencia":
+            debilidad = Personaje.getResistencia()
+        elif debilidad == "inteligencia":
+            debilidad = Personaje.getInteligencia()
+        else:
+            debilidad = Personaje.getSuerte()
+        lista = list()
+        # 1. self.destreza, 2. self.resistencia, 3. self.inteligencia, 4. self.suerte
+        for i in range(len(listaStatsPrueba)):
+            lista.append(listaStatsPer[i] - listaStatsPrueba[i])
+        suma = sum(lista)
+        print "Vida Prueba:",listaStatsPrueba[0], "Debilidad ", debilidad
+        return suma*int(listaStatsPrueba[0]/debilidad)
+
+class Dialogo:
+    @staticmethod
     # Esta funcion imprime el saludo del inicio del programa
-    def imprimirSaludo(self):
+    def imprimirSaludo():
         print "¡Bienvenido a la simulación de pruebas!"
         print "Por favor escribe el nombre de tu personaje:"
 
+    @staticmethod
     # Imprime la vida, tiempo y stats iniciales a repartir del personaje
-    def informarInicio(self, personaje):
+    def informarInicio(personaje):
         f = "Muy bien {0}, te informo que posees:"
         f1 = "{0} puntos de Vida base"
         f2 = "{0} puntos de Tiempo"
@@ -64,20 +83,31 @@ class Texto:
         print f3.format(personaje.getStats())
         print f4.format(personaje.getStats())
 
+    @staticmethod
+    def imprimirPerdiste():
+        print "¡Perdiste!, los ramos eran muy dificiles..."
+
+    @staticmethod
+    def imprimirFelicitaciones(hpPerdido):
+        f = "¡SÍ! Lo lograste, pero perdiste {0} puntos de vida"
+        print f.format(hpPerdido)
     # Esta funcion imprimira el error al intentar agregar stats que exceden de los que posee el personaje
-    def imprimirError1(self):
+    def imprimirError1():
         print "Lo siento, esa cantidad excede lo que tienes disponible."
         print "Empezaremos de nuevo por si te equivocaste al repartir."
 
+    @staticmethod
     # Esta funcion imprimira que sobraron stats al agregarselos al personaje.
-    def imprimirError2(self):
+    def imprimirError2():
         print "¡Te sobran puntos! Dadas tus malas matemáticas, te las asignaremos a Suerte (puede que la necesites)."
 
-    def imprimirError3(self):
+    @staticmethod
+    def imprimirError3():
         print "¡No tienes tiempo suficiente para usar este consumible! Intenta con otro"
 
+    @staticmethod
     # Esta funcion imprime la lista de consumibles que posee el personaje
-    def imprimirConsumibles(self, lista):
+    def imprimirConsumibles(lista):
         f = "{0}.- ({1}) {2}: {3} de tiempo, {4} de {5}"
         contador = 1
         for consumible in lista:
@@ -86,14 +116,16 @@ class Texto:
             contador += 1
             print linea
 
+    @staticmethod
     # Imprime el texto relacionado con los consumibles y luego se imprime el listado de consumibles
-    def imprimirListadoCon(self, lista):
+    def imprimirListadoCon(lista):
         print "Aquí están los consumibles, selecciona el número del objeto que deseas."
         print "Para comenzar la evaluación ingresa -1."
-        self.imprimirConsumibles(lista)
+        Dialogo.imprimirConsumibles(lista)
 
+    @staticmethod
     # Esta funcion imprime la lista de equipamiento que posee el personaje
-    def imprimirEquipamiento(self, lista):
+    def imprimirEquipamiento(lista):
         f = "{0}.- {1}: Bonificador {2} a {3}"
         contador = 1
         for equipamiento in lista:
@@ -101,12 +133,25 @@ class Texto:
             contador += 1
             print linea
 
+    @staticmethod
     # Esta funcion imprime el texto relacionado con los equipos y luego se imprime el listado de equipamiento
-    def imprimirListadoEq(self, lista):
+    def imprimirListadoEq(lista):
         print "Aquí está el listado de todos los equipamientos que hay, elige un número para equiparlo."
         print "En caso de que ya no quieras equiparte más ingresa -1."
-        self.imprimirEquipamiento(lista)
+        Dialogo.imprimirEquipamiento(lista)
 
+    @staticmethod
+    def imprimirInterrogacion(Partida, i):
+        nombre = Partida.getPersonaje().getNombre()
+        nombrePrueba = Partida.getPruebas()[i].getNombre()
+        debilidad = Partida.getPruebas()[i].getDebilidad()
+        v,d,r,i,s = Partida.getPruebas()[i].getListaStats()
+
+        f = "Prepárate {0} para enfrentar a la {1} (música dramática)"
+        f1 = "Esta prueba posee V {0} D{1} R {2} I {3} S {4} y es débil contra la {5} ¿Podrás superarla?"
+        print "¡Llegó la hora de la evaluación!"
+        print f.format(nombre, nombrePrueba)
+        print f1.format(v,d,r,i,s,debilidad)
 
 class Simulacion:
     def __init__(self, consumibles, equipo, pruebas, personaje):
@@ -115,6 +160,19 @@ class Simulacion:
         self.pruebas = pruebas
         self.personaje = personaje
         self.copyPersonaje = copy.deepcopy(personaje)
+
+    def daniarPersonaje(self, hpPerdido):
+        self.personaje.quitarHp(hpPerdido)
+
+    def evaluacion(self, i):
+        vidaPerdida = main.CalculoEvaluacion(self.getPersonaje(), self.getPruebas()[i])
+        if vidaPerdida < 0:
+            return False, abs(vidaPerdida)
+        else:
+            return True, 0
+
+    def personajeVivo(self):
+        return self.personaje.vivo()
 
     def restarStockConsumible(self, indice):
         objeto = self.consumibles[indice]
@@ -167,6 +225,12 @@ class Simulacion:
     def getcopyPersonaje(self):
         return self.copyPersonaje
 
+    def getStatsPersonaje(self):
+        return self.personaje.getListaStats()
+
+    def imprimirStatsPersonaje(self):
+        self.personaje.imprimirStats()
+
     def buffearAtributo(self, multiplicador, atributo):
         self.personaje.buffearAtributo(multiplicador, atributo)
 
@@ -187,6 +251,14 @@ class Prueba:
         self.suerte = suerte
         self.debilidad = debilidad
 
+    def getListaStats(self):
+        return [self.vida, self.destreza, self.resistencia, self.inteligencia, self.suerte]
+
+    def getDebilidad(self):
+        return self.debilidad
+
+    def getNombre(self):
+        return self.nombre
 
 class Personaje:
     def __init__(self, nombre, v, t, stats, destreza, resistencia, inteligencia, suerte):
@@ -198,6 +270,14 @@ class Personaje:
         self.resistencia = resistencia
         self.inteligencia = inteligencia
         self.suerte = suerte
+
+    def quitarHp(self, hpPerdido):
+        self.vida -= hpPerdido
+
+    def vivo(self):
+        if self.vida >= 0:
+            return True
+        return False
 
     def getNombre(self):
         return self.nombre
@@ -222,6 +302,9 @@ class Personaje:
 
     def getSuerte(self):
         return self.suerte
+
+    def getListaStats(self):
+        return [self.vida, self.destreza, self.resistencia, self.inteligencia, self.suerte]
 
     # Esta funcion imprime los stats actuales del personaje
     def imprimirStats(self):
