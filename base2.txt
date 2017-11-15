@@ -1,0 +1,12 @@
+50,1440,200
+3,4
+Ejercicios Propuestos,1,destreza,50,90
+Dormir siesta,3,resistencia,40,30
+Usar prenda de la suerte,2,suerte,10,10
+Chocolate,resistencia,1.1
+Pañuelos,suerte,1.2
+Botella de agua,resistencia,1.3
+Muñequeras,destreza,1.2
+Interrogación de Cálculo I,110,30,65,70,30,destreza
+Interrogación de Cálculo II,110,30,65,70,30,destreza
+Interrogación de Cálculo III,110,30,65,70,30,destreza

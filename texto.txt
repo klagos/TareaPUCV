@@ -1,0 +1,19 @@
+¡Bienvenido a la simulación de pruebas!
+Por favor escribe el nombre de tu personaje:
+Lo siento, esa cantidad excede lo que tienes disponible.
+Empezaremos de nuevo por si te equivocaste al repartir.
+¡Te sobran puntos! Dadas tus malas matemáticas, te las asignaremos a Suerte (puede que la necesites).
+
+Aquí está el listado de todos los equipamientos que hay, elige un número para equiparlo.
+En caso de que ya no quieras equiparte más ingresa -1.
+Aquí están los consumibles, selecciona el número del objeto que deseas.
+Para comenzar la evaluación ingresa -1.
+¡Llegó la hora de la evaluación!
+Prepárate {1} para enfrentar a la {2} (música dramática)
+Esta prueba posee V {0} D {1} R {2} I {3} S {4} y es débil contra la {5} ¿Podrás superarla?
+¡SÍ! Lo lograste, pero perdiste {0} puntos de vida
+¿Estás listo para el siguiente combate? Mejor prepárate antes
+Aquí estan los consumibles, selecciona el número del objeto que deseas.
+Para comenzar la evaluación ingresa -1.
+Stats actuales: V {0} D {1} R {2} I {3} S {4}
+Tiempo disponible: 1420
