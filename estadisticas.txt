@@ -1,0 +1,10 @@
+Kevin
+100,50,44,40,24,1440
+34,50,44,40,24,1240
+Interrogacion de Calculo I,Interrogacion de Algebra Lineal,Interrogacion de Biologia de la Celula
+Ejercicios propuestos,1
+Usar prenda de la suerte,2
+Dormir siesta,3
+Chocolate
+Pañuelos
+200
